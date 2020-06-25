@@ -1,0 +1,12 @@
+extends layouts/main
+include mixins/videoBlock
+block content
+    .videos
+        each item in videosDB
+            +videoBlock({
+                title: item.title,
+                views: item.views,
+                videoFile: item.videoFile
+            })
+
+        //- each item in/of array item자리에 뭐 들어가든 상관없음. mixin인자와 일치해야하는것도아님

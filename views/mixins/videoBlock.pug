@@ -1,0 +1,10 @@
+mixin videoBlock(video={})
+    .videoBlock
+        video.videoBlock__thumbnail(src=video.videoFile, controls=true)
+        h4.videoBlock__title=video.title
+        h6.videoBlock__views=video.views
+
+
+
+//- pug함수. 인자 하나 받음. 인자 초기값 설정해준것
+//- 파일이름이랑 이름 일치해야하나??
