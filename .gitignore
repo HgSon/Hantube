@@ -120,3 +120,6 @@ dist
 node_modules
 >>>>>>> 4b7b584c2a8f94af30650d99fe56846a562c0057
 package-lock.json
+
+uploads
+static

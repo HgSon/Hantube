@@ -41,8 +41,15 @@ const routes = {
         if(id) return `/videos/${id}`
         else return VIDEO_DETAIL
     },
-    editVideo: EDIT_VIDEO,
-    deleteVideo: DETELE_VIDEO
+    editVideo: id => {
+        if(id) return `/videos/${id}/edit`;
+        else return EDIT_VIDEO;
+    },
+    deleteVideo: id =>{
+        if(id) return `/videos/${id}/delete`;
+        else return DETELE_VIDEO;
+    }
 }
+//일단 videorauter('/:id',로 들어가서 컨트롤러f(){}). 거기서 id받아서 아이디 url에 아이디 채우는건 template에서(예를들어서 홈에서 id잇는주소로 링크걸림)
 
 export default routes;
