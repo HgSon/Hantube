@@ -4,11 +4,13 @@ import express from "express";
 import globalRouter from "./routers/globalRouter";
 import helmet from "helmet";
 import morgan from "morgan";
-// import { userRouter } from "./router"
 import { localsMiddleware } from "./middlewares";
 import routes from "./routes";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import passport from "passport";
+import "./passport";
+
 const app = express();
 
 app.use(helmet());
@@ -20,6 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 app.use(localsMiddleware);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
