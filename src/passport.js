@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: __dirname + "/.env" });
 import passport from "passport";
-import facebookStrategy from "passport-facebook";
-import GithubStrategy from "passport-github";
+import GithubStrategy from "passport-github2";
+import KakaoStrategy from "passport-kakao";
 import User from "./models/User";
 import {
   githubLoginCallback,
-  fbLoginCallback,
+  kakaoLoginCallback,
 } from "./controller/userController";
 import routes from "./routes";
 
@@ -22,17 +22,14 @@ passport.use(
     githubLoginCallback
   )
 );
-
 passport.use(
-  new facebookStrategy(
+  new KakaoStrategy(
     {
-      clientID: process.env.FB_ID,
-      clientSecret: process.env.FB_SECRET,
-      callbackURL: `http://localhost:4000${routes.fbCallback}`,
-      profileFields: ["id", "displayName", "photos", "email"],
-      scope: ["public_profile", "email"],
+      clientID: process.env.KAKAO_ID,
+      clientSecret: process.env.KAKAO_SECRET,
+      callbackURL: `http://localhost:4000${routes.kakaoCallback}`,
     },
-    fbLoginCallback
+    kakaoLoginCallback
   )
 );
 

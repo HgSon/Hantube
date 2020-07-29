@@ -9,13 +9,12 @@ import {
   logout,
   githubLogin,
   postGithubLogin,
-  postGithubLoginRedirect,
+  postLoginRedirect,
   getMe,
-  fbLogin,
-  postFbLogin,
+  kakaoLogin,
+  postKaKaoLogin,
 } from "../controller/userController";
 import { onlyPublic, onlyPrivate } from "../middlewares";
-import passport from "passport";
 
 const globalRouter = express.Router();
 
@@ -35,23 +34,12 @@ globalRouter.get(routes.me, getMe);
 
 //github login
 globalRouter.get(routes.gitHub, githubLogin);
-globalRouter.get(
-  routes.githubCallback,
-  postGithubLogin,
-  postGithubLoginRedirect
-);
+globalRouter.get(routes.githubCallback, postGithubLogin, postLoginRedirect);
 // /auth/github으로 가면 process에서 만든 github stratage에따라 auth. 정책에 /callback으로 보내는 주소있으므로
 //아래것 실행
 
 //facebook login
-globalRouter.get(routes.faceBook, fbLogin);
-globalRouter.get(
-  routes.fbCallback,
-  passport.authenticate(
-    "facebook",
-    { failureRedirect: routes.login },
-    postFbLogin
-  )
-);
+globalRouter.get(routes.kakao, kakaoLogin);
+globalRouter.get(routes.kakaoCallback, postKaKaoLogin, postLoginRedirect);
 
 export default globalRouter;

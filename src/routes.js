@@ -9,8 +9,8 @@ const ME = "/me";
 //social login
 const GITHUB = "/auth/github";
 const GITHUB_CALLBACK = "/auth/github/callback";
-const FB = "/auth/facebook";
-const FB_CALLBACK = "/auth/facebook/callback";
+const KAKAO = "/auth/kakao";
+const KAKAO_CALLBACK = "/auth/kakao/callback";
 
 //Users
 
@@ -38,8 +38,8 @@ const routes = {
   login: LOGIN,
   gitHub: GITHUB,
   githubCallback: GITHUB_CALLBACK,
-  faceBook: FB,
-  fbCallback: FB_CALLBACK,
+  kakao: KAKAO,
+  kakaoCallback: KAKAO_CALLBACK,
   logout: LOGOUT,
   search: SEARCH,
   me: ME,

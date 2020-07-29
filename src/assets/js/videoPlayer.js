@@ -1,3 +1,5 @@
+import getBlobDuration from "get-blob-duration";
+
 const videoContainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
 const playBtn = document.getElementById("jsPlayBtn");
@@ -56,8 +58,13 @@ const formatDate = (rawSeconds) => {
   if (seconds < 10) seconds = `0${seconds}`;
   return `${hours}:${minites}:${seconds}`;
 };
-function setTotalTime() {
-  totalTime.innerHTML = formatDate(Math.floor(videoPlayer.duration));
+async function setTotalTime() {
+  const myBlob = await fetch(videoPlayer.src).then((response) =>
+    response.blob()
+  );
+  const duration = await getBlobDuration(myBlob);
+  const totalTimeString = formatDate(duration);
+  totalTime.innerHTML = totalTimeString;
   setInterval(getCurrentTime, 1000);
 }
 //htmlMediaElement mdn에서 검색

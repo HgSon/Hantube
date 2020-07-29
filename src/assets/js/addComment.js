@@ -4,6 +4,11 @@ const commentsList = document.getElementById("jsCommentsList");
 const commentsNumber = document.getElementById("jsCommentsNumber");
 const deleteBtn = document.getElementById("jsCommentDelete");
 
+const showDeleteBtn = () => {
+  console.log(window.location.href);
+  const videoId = window.location.href.split("/videos");
+  console.log(videoId);
+};
 const increaseNumber = () => {
   commentsNumber.innerHTML = parseInt(commentsNumber.innerHTML, 10) + 1;
 };
@@ -34,11 +39,12 @@ const handleSubmit = (event) => {
   commentInput.value = "";
 };
 
-// const handleDeleteComment = () =>{
-//     sub
-// }
+const handleDeleteComment = () => {
+  console.log("E");
+};
 
 function init() {
+  showDeleteBtn();
   addCommentForm.addEventListener("submit", handleSubmit);
   // deleteBtn.addEventListener("click", handleDeleteComment);
 }

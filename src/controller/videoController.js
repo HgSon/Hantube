@@ -1,6 +1,7 @@
 import routes from "../routes";
 import Video from "../models/Video"; //변수 아니고 모델
 import Comment from "../models/Comment"; //변수 아니고 모델
+import "../passport";
 
 export const home = async (req, res) => {
   try {
@@ -33,11 +34,11 @@ export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });
 export const postUpload = async (req, res) => {
   const {
-    file: { path },
+    file: { location },
     body: { description, title },
   } = req;
   const newVideo = await Video.create({
-    fileUrl: path,
+    fileUrl: location,
     title,
     description,
     creator: req.user.id,
@@ -45,7 +46,6 @@ export const postUpload = async (req, res) => {
   req.user.videos.push(newVideo.id);
   req.user.save();
   res.redirect(routes.videoDetail(newVideo.id));
-  //To do: upload and save
 };
 
 export const videoDetail = async (req, res) => {
@@ -59,11 +59,11 @@ export const videoDetail = async (req, res) => {
       .populate("comments");
     const comments = video.comments;
     comments.forEach((comment) => {
-      if (comment.creator == user.id) return;
-    });
+      if (user && comment.creator === user.id) comment.same = true;
+    }); // x단추?
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.redirect(routes.home);
   }
 };

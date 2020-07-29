@@ -40,7 +40,8 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
   const {
     _json: { id, avatar_url, login },
   } = profile;
-  const email = profile._json.email || process.env.GH_EMAIL;
+  const email = profile._json.email || `${id}.github.protected`;
+  console.log(id);
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -49,52 +50,59 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
       return cb(null, user);
     }
     const newUser = await User.create({
+      name: login,
       githubId: id,
-      avatarUrl: avatar_url,
       email,
-      name: login, //바꾸고나서 db에 이름안들어감. 체크
+      avatarUrl: avatar_url,
     });
     return cb(null, newUser);
   } catch (error) {
+    console.log(`error${error}`);
     cb(error);
   }
 };
 export const postGithubLogin = passport.authenticate("github", {
   failureRedirect: routes.login,
 });
-export const postGithubLoginRedirect = (req, res) => {
+export const postLoginRedirect = (req, res) => {
   res.redirect(routes.home);
 };
 
-//facebook login
-export const fbLogin = passport.authenticate("facebook");
-export const fbLoginCallback = async (_, __, profile, cb) => {
+//kakaotalk login
+export const kakaoLogin = passport.authenticate("kakao");
+
+export const kakaoLoginCallback = async (_, __, profile, done) => {
   const {
-    _json: { id, name },
+    _json: {
+      properties: { nickname },
+      id,
+      profile_image,
+      kakao_account: { email },
+    },
   } = profile;
-  const email = "park.daum.net";
   try {
-    const user = await User.findOne({ name });
-    //임시
+    const user = await User.findOne({ email });
     if (user) {
-      user.facebookId = id;
+      user.kakaoId = id;
       user.save();
-      return cb(null, user);
+      return done(null, user);
     }
     const newUser = await User.create({
-      facebookId: id,
-      name,
+      name: nickname,
+      kakaoId: id,
       email,
-      avatarUrl: `https://graph.facebook.com/${id}/picture?type=large`,
+      avatarUrl: profile_image,
     });
-    return cb(null, newUser);
+    return done(null, newUser);
   } catch (error) {
-    cb(error);
+    console.log(`error${error}`);
+    done(error);
   }
 };
-export const postFbLogin = (req, res) => {
-  res.redirect(routes.home);
-};
+
+export const postKaKaoLogin = passport.authenticate("kakao", {
+  failureRedirect: routes.login,
+});
 
 //logout
 export const logout = (req, res) => {
@@ -130,7 +138,7 @@ export const postEditProfile = async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, {
       name,
       email,
-      avatarUrl: file ? file.path : req.user.avatarUrl,
+      avatarUrl: file ? file.location : req.user.avatarUrl,
     });
     res.redirect(routes.me);
   } catch (error) {
